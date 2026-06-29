@@ -47,6 +47,19 @@ typedef enum
     RC522_EVENT_PICC_STATE_CHANGED,
 } rc522_event_t;
 
+/**
+ * Receiver (antenna) gain
+ */
+typedef enum
+{
+    RC522_PCD_18_DB_RX_GAIN = 0x20, /* 18 dB */
+    RC522_PCD_23_DB_RX_GAIN = 0x30, /* 23 dB */
+    RC522_PCD_33_DB_RX_GAIN = 0x40, /* 33 dB */
+    RC522_PCD_38_DB_RX_GAIN = 0x50, /* 38 dB */
+    RC522_PCD_43_DB_RX_GAIN = 0x60, /* 43 dB */
+    RC522_PCD_48_DB_RX_GAIN = 0x70, /* 48 dB */
+} rc522_pcd_rx_gain_t;
+
 #ifdef __cplusplus
 }
 #endif

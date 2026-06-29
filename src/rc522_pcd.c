@@ -148,9 +148,12 @@ inline static esp_err_t rc522_pcd_set_timer_reload_value(const rc522_handle_t rc
     return ESP_OK;
 }
 
-inline static esp_err_t rc522_pcd_set_rx_gain(const rc522_handle_t rc522, rc522_pcd_rx_gain_t gain)
+esp_err_t rc522_pcd_set_rx_gain(const rc522_handle_t rc522, rc522_pcd_rx_gain_t gain)
 {
-    return rc522_pcd_set_bits(rc522, RC522_PCD_RF_CFG_REG, gain);
+    RC522_RETURN_ON_ERROR(rc522_pcd_clear_bits(rc522, RC522_PCD_RF_CFG_REG, 0x70));
+    RC522_RETURN_ON_ERROR(rc522_pcd_set_bits(rc522, RC522_PCD_RF_CFG_REG, (gain & 0x70)));
+
+    return ESP_OK;
 }
 
 esp_err_t rc522_pcd_init(const rc522_handle_t rc522)
@@ -185,6 +188,9 @@ esp_err_t rc522_pcd_init(const rc522_handle_t rc522)
 
     // Enable the antenna driver pins TX1 and TX2 (they were disabled by the reset)
     RC522_RETURN_ON_ERROR(rc522_pcd_tx_enable(rc522));
+
+    // Set default antenna gain
+    RC522_RETURN_ON_ERROR(rc522_pcd_write(rc522, RC522_PCD_RF_CFG_REG, RC522_PCD_33_DB_RX_GAIN));
 
     rc522_pcd_firmware_t fw;
     ESP_RETURN_ON_ERROR(rc522_pcd_firmware(rc522, &fw), TAG, "read fw version failed");
